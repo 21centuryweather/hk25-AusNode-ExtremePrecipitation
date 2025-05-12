@@ -3,9 +3,15 @@
 Project description, please include the main idea and questions that motivate the project.
 
 
-**Project leads:** name, affiliation/github username
+**Project leads:** Ashneel Chandra (PhotonPi), Leena Khadke (khadkeleenasanjay)
 
-**Project members:** name, affiliation/github username
+**Project members:** Skye Williams-Kelly (SkyeEllen), 
+Greta Paget (gpaget98)
+Joel Treutlein (Jatreutlein)
+Xueying Wang ()
+Kathiana Aznaran Luk (kath18)
+Huyen Luong ()
+Phuong Loan Nguyen ()
 
 **Collaborators:** list here other collaborators to the project.
 
