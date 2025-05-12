@@ -8,10 +8,10 @@ Project description, please include the main idea and questions that motivate th
 **Project members:** Skye Williams-Kelly (SkyeEllen), 
 Greta Paget (gpaget98)
 Joel Treutlein (Jatreutlein)
-Xueying Wang ()
+Xueying Wang (SylviaWang87)
 Kathiana Aznaran Luk (kath18)
-Huyen Luong ()
-Phuong Loan Nguyen ()
+Huyen Luong (huyenluong)
+Phuong Loan Nguyen (ploan)
 
 **Collaborators:** list here other collaborators to the project.
 
