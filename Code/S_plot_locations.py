@@ -6,54 +6,14 @@ import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import pandas as pd
 
+
+# Read in weather station data
+ws = pd.read_excel('Syd_station_info.xlsx')
+
 # Create lat / lon arrays
-lat = []
-lon = []
-ws_names_detailed = ['Suva (Manual)', 'Suva (Automatic)', 'Lautoka (Manual)', 'Lautoka (TB3)', 'Penang (TB3)', 'Savusavu (Airport)', 'Labasa (Airport)']
-ws_names = ['Suva', 'Suva', 'Lautoka', 'Lautoka', 'Penang (TB3)', 'Savusavu (Airport)', 'Labasa (Airport)']
-
-#Suva (Manual)
-lat_station = -18.147571
-lon_station = 178.453610
-lat.append(lat_station)
-lon.append(lon_station)
-
-
-#Suva (AWS)
-lat_station = -18.147549
-lon_station = 178.453608
-lat.append(lat_station)
-lon.append(lon_station)
-
-#Lautoka (Manual)
-lat_station = -17.618600
-lon_station = 177.438900
-lat.append(lat_station)
-lon.append(lon_station)
-
-#Lautoka (TB3)
-lat_station = -17.618897
-lon_station = 177.438730
-lat.append(lat_station)
-lon.append(lon_station)
-
-#Penang (TB3)
-lat_station = -17.373833
-lon_station = 178.171619
-lat.append(lat_station)
-lon.append(lon_station)
-
-#Savusavu (Airport)
-lat_station = -16.806141
-lon_station = 179.342817
-lat.append(lat_station)
-lon.append(lon_station)
-
-#Labasa (Airport)
-lat_station = -16.468900
-lon_station = 179.339700
-lat.append(lat_station)
-lon.append(lon_station)
+lon = ws['Longitude']
+lat = ws['Latitude']
+ws_names = ws['Station_name']
 
 # Get boundary of points
 #margin = 2 # optional margin for the boundary
@@ -90,10 +50,5 @@ for i in range(0, len(lon)):
             horizontalalignment='right',
             transform=ccrs.Geodetic())
 
-plt.title('Locations of Fiji weather stations')
+plt.title('Locations of Sydney weather stations')
 plt.show()
-
-
-
-
-
