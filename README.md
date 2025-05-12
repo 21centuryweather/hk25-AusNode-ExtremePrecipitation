@@ -1,11 +1,17 @@
-# add project name here  <img src='https://21centuryweather.org.au/wp-content/uploads/Hackathon-Image-WCRP-Positive-1536x736.jpg' align="right" height="139" />
+# Model intercomparison for extremes precipitation  <img src='https://21centuryweather.org.au/wp-content/uploads/Hackathon-Image-WCRP-Positive-1536x736.jpg' align="right" height="139" />
 
-Project description, please include the main idea and questions that motivate the project.
+How well do convection-permitting models represent extreme precipitation events?
 
 
-**Project leads:** name, affiliation/github username
+**Project leads:** Ashneel Chandra (PhotonPi), Leena Khadke (khadkeleenasanjay)
 
-**Project members:** name, affiliation/github username
+**Project members:** Skye Williams-Kelly (SkyeEllen), 
+Greta Paget (gpaget98),
+Joel Treutlein (Jatreutlein),
+Xueying Wang (SylviaWang87),
+Kathiana Aznaran Luk (kath18),
+Huyen Luong (huyenluong),
+Phuong Loan Nguyen (ploan)
 
 **Collaborators:** list here other collaborators to the project.
 
