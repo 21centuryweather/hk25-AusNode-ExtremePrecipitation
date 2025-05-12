@@ -6,11 +6,11 @@ How well do convection-permitting models represent extreme precipitation events?
 **Project leads:** Ashneel Chandra (PhotonPi), Leena Khadke (khadkeleenasanjay)
 
 **Project members:** Skye Williams-Kelly (SkyeEllen), 
-Greta Paget (gpaget98)
-Joel Treutlein (Jatreutlein)
-Xueying Wang (SylviaWang87)
-Kathiana Aznaran Luk (kath18)
-Huyen Luong (huyenluong)
+Greta Paget (gpaget98),
+Joel Treutlein (Jatreutlein),
+Xueying Wang (SylviaWang87),
+Kathiana Aznaran Luk (kath18),
+Huyen Luong (huyenluong),
 Phuong Loan Nguyen (ploan)
 
 **Collaborators:** list here other collaborators to the project.
