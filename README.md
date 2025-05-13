@@ -33,24 +33,31 @@ All tasks and activities will be managed through GitHub Issues. While most discu
 
 * **Main branch:** We want to keep things simple, if you are working on a notebook alone you can push changes to the main branch. Make sure to 1) only add and ccommit that file and nothing else, 2) pull from the remote repo and 3) push.
 
-* **Working on a branch:** if you want to fix or propose a change to someone else code you will need to create a branch and open a pull request. Make sure you explain your suggestion in the pull request message. **This also applies to collaborators outside the project team.**
+*  **File naming conventions:** use the prefix `_f__` in the filename for analysis of Fijian data and use the prefix `_s__` for Sydney region.
+
+*  **Timezones:** Station data is provided in local standard time (i.e. without Daylight Savings where applicable). Model output should be shifted by the appropirate amount (Sydney = UTC + 10, Fiji = UTC + 12) before comparisons/accumulating over days.
 
 ### Repository structure
 
-This is how the project should look like but make sure to change the name `template-hackathon-project` to something meaningful. 
-
 ```bash
-template-hackathon-project/
+hk25-AusNode-ExtremePrecipitation/
 ├── LICENCE
 ├── README.md
-├── template_project_hackathon
+├── Code
 │   ├── analysis.py
 │   ├── __init__.py
 │   └── read.py
+├── Data
+│   ├── Processed/
+│   ├── Stations/
+├── Plots
+│   ├── F_weather_station_locations.png
+│   ├── S_weather_station_locations.png
 └── tests
     ├── test_analysis.py
     └── test_read.py
 ```
-* `template_hackathon_project/` this folder will include the code to analysis the data.
-* `tests/` this folder contains test code that verifies that your code does what it should.
+* `Code/` this folder will include the code to analyse the data.
+* `Data/` this folder contains the original Fijian station data and processed station data for both Sydney and Fiji
+* `Plots/` this folder contains plotted output/image files
 
