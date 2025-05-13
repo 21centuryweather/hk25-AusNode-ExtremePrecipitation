@@ -2,7 +2,6 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-#from mpl_toolkits.basemap import Basemap
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import pandas as pd
@@ -77,11 +76,8 @@ ax.add_feature(cfeature.RIVERS)
 ax.add_feature(cfeature.LAND, color='lightgray')
 ax.add_feature(cfeature.OCEAN, color='lightblue')
 
-# Set extent to focus on a specific region (optional)
-#ax.set_extent(bounds, crs=ccrs.PlateCarree())
-
 # Add gridlines and labels (optional)
-gl = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True,
+gl = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=False,
                       linewidth=0.5, color='gray', alpha=0.5, linestyle='--')
 gl.xlabels_top = False
 gl.ylabels_right = False
