@@ -16,6 +16,7 @@ pd.options.mode.chained_assignment = None  # default='warn'
 stations = ["Suva Manual", "Suva AWS", "Lautoka Manual", "Lautoka TB3", "Penang TB3"]
 sub_daily_fpath = "../Data/Stations/Fiji_Meteorological_Service/Sub Daily Rainfall Data.xlsx"
 col_names = ["date", "time", "rain_1h_mm", "accumulation_hours"]
+outpath = "../Data/Stations/Processed/Fiji/"
 
 # Read in data
 suva_aws_full = pd.read_excel(sub_daily_fpath, 
@@ -138,6 +139,7 @@ missing_df.set_index("datetime")
 suva_aws = pd.concat([suva_aws, missing_df])
 suva_aws.sort_values("datetime", inplace=True)
 
+suva_aws.to_csv(outpath + "suva_aws_1H.csv")
 #%% Resample
 suva_aws.set_index("datetime", inplace=True)
 suva_3H = suva_aws.rain_1h_mm.resample('3H').sum(min_count=6).to_frame()
@@ -237,6 +239,7 @@ plt.plot(l_m_daily.rain_24h_mm)
 # High values again correspond to known heavy rain/flooding
 # e.g. 2006-01-29 maximum value from a tropical monsoon
 
+lautoka_m.to_csv(outpath + "lautoka_man_1H.csv")
 # %% Lautoka TP3 ##################
 lautoka_tb3_full.groupby("accumulation_hours").time.count()
 # All 1 hour accumulations
@@ -271,10 +274,11 @@ penang_tb3 = complete_df(penang_tb3_full)
 
 plt.plot(penang_tb3.rain_1h_mm)
 
-
 penang_tb3_daily = get_daily(penang_tb3)
 plt.figure(2)
 plt.plot(penang_tb3_daily.rain_24h_mm)
+
+penang_tb3.to_csv(outpath + "penang_tb3_1H.csv", index=True)
 
 # %%Check day of week averages
 penang_tb3_daily.reset_index(inplace=True)
