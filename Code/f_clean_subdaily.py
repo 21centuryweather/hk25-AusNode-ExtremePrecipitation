@@ -166,7 +166,7 @@ def complete_df(station_data):
     expected_timesteps = pd.date_range(min(station_data.datetime), max(station_data.datetime), freq="h")
     missing_timesteps = expected_timesteps[~expected_timesteps.isin(station_data.datetime)]
     missing_df = pd.DataFrame({"datetime": missing_timesteps,
-                            "date": missing_timesteps.date, 
+                            "date": pd.to_datetime(missing_timesteps.date), 
                             "time": missing_timesteps.time, 
                             "rain_1h_mm": None, 
                             "accumulation_hours": 1})
@@ -196,7 +196,9 @@ def complete_resample(station_data, out_fname):
     return station_3H
 
 def get_daily(station_data):
-    return station_data.rain_1h_mm.resample("D").sum().to_frame()
+    daily_data = station_data.rain_1h_mm.resample("D").sum().to_frame()
+    daily_data.rename(columns = {"rain_1h_mm": "rain_24h_mm"}, inplace = True)
+    return daily_data
 #%% Suva Manual ##################
 suva_m = complete_df(suva_m_full)
 
@@ -220,15 +222,62 @@ suva_m_daily_outliers = m_daily.loc[m_daily.rain_1h_mm > 250]
 # Save one hourly
 suva_m.to_csv(outpath + "suva_man_1H.csv", index = True)
 m_daily.to_csv(outpath + "suva_man_24H.csv", index = True)
+
 # %% Lautoka ##################
 lautoka_m_full.groupby("accumulation_hours").time.count()
+
 # %%
 lautoka_m = complete_df(lautoka_m_full)
-lautoka_m.set_index("datetime", inplace = True)
 
 # Plot full timeseries
 plt.plot(lautoka_m.rain_1h_mm)
 
-l_m_daily = lautoka_m.rain_1h_mm.resample("D").sum().to_frame()
+l_m_daily = get_daily(lautoka_m)
+plt.plot(l_m_daily.rain_24h_mm)
+# High values again correspond to known heavy rain/flooding
+# e.g. 2006-01-29 maximum value from a tropical monsoon
 
+# %% Lautoka TP3 ##################
+lautoka_tb3_full.groupby("accumulation_hours").time.count()
+# All 1 hour accumulations
+
+lautoka_tb3 = complete_df(lautoka_tb3_full)
+# Missing 9941 timesteps over 464 days
+# Date range = 2008-12-15 to 2022-12-31
+
+plt.figure(1)
+plt.plot(lautoka_tb3.rain_1h_mm)
+
+l_tb3_daily = get_daily(lautoka_m)
+plt.figure(2)
+plt.plot(l_tb3_daily.rain_24h_mm)
+
+# Check day of week averages
+l_tb3_daily.reset_index(inplace=True)
+l_tb3_daily.rain_24h_mm.groupby(l_tb3_daily.datetime.dt.day_of_week).mean()
+
+# Comparison with manual
+plt.figure(3)
+plt.scatter(lautoka_tb3.rain_1h_mm, lautoka_tb3.rain_1h_mm)
+plt.xlabel("Manual")
+plt.ylabel("TP3")
+
+# Export 1H
+lautoka_tb3.to_csv(outpath + "lautoka_tb3_1H.csv")
+
+#%% Penang TP3 ##################
+penang_tb3 = complete_df(penang_tb3_full)
+# 1784 missing timesteps added, covering 124 days
+
+plt.plot(penang_tb3.rain_1h_mm)
+
+
+penang_tb3_daily = get_daily(penang_tb3)
+plt.figure(2)
+plt.plot(penang_tb3_daily.rain_24h_mm)
+
+# %%Check day of week averages
+penang_tb3_daily.reset_index(inplace=True)
+plt.plot(penang_tb3_daily.rain_24h_mm.groupby(penang_tb3_daily.datetime.dt.day_name()).mean())
+plt.xticks()
 # %%
