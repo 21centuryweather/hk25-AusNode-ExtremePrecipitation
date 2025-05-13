@@ -7,6 +7,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# Options
+# To remove errors from subsetting then performing df manipulations
+pd.options.mode.chained_assignment = None  # default='warn'
+
 #%% Read station data
 # List of tab names
 stations = ["Suva Manual", "Suva AWS", "Lautoka Manual", "Lautoka TB3", "Penang TB3"]
@@ -53,7 +57,7 @@ suva_m = suva_m_full.loc[suva_m_full.accumulation_hours == 1]
 
 # Get daily total
 aws_daily = suva_aws.groupby(suva_aws.date).rain_1h_mm.sum().to_frame()
-m_daily = suva_m[suva_m.accumulation_hours == 1].groupby(suva_aws.date).rain_1h_mm.sum().to_frame()
+m_daily = suva_m[suva_m.accumulation_hours == 1].groupby(suva_m.date).rain_1h_mm.sum().to_frame()
 
 # Inner join for common days
 aws_daily = aws_daily.reset_index(drop = False)
@@ -144,14 +148,20 @@ sum(np.isnan(suva_3H.rain_1h_mm))
 
 # %% Export
 import os
-outpath = "../Data/Stations/Processed/Fiji/"
+outpath = "../Data/Processed/Fiji/"
 if not os.path.exists(outpath):
     os.mkdir(outpath)
 suva_3H.to_csv(outpath + "suva_aws_3H.csv")
 
 # %% Useful functions
 # Dataframe must have a 'datetime' column
-def complete_resample(station_data, out_fname):
+def complete_df(station_data):
+    # Remove accumulations
+    station_data = station_data.loc[station_data.accumulation_hours == 1]
+    
+    # Add datetime column
+    station_data["datetime"] = pd.to_datetime(station_data.date.astype(str) + ' ' + station_data.time.astype(str))
+     
     # Add missing timesteps
     expected_timesteps = pd.date_range(min(station_data.datetime), max(station_data.datetime), freq="h")
     missing_timesteps = expected_timesteps[~expected_timesteps.isin(station_data.datetime)]
@@ -159,16 +169,21 @@ def complete_resample(station_data, out_fname):
                             "date": missing_timesteps.date, 
                             "time": missing_timesteps.time, 
                             "rain_1h_mm": None, 
-                            "accumulation_hours": None})
+                            "accumulation_hours": 1})
     missing_df.set_index("datetime")
     print(f"{len(missing_timesteps)} missing timesteps added, covering {len(missing_df.date.unique())} days")
 
-    station_data = pd.concat([station_data, missing_df])
-    station_data.sort_values("datetime", inplace=True)
+    station_data = pd.concat([station_data, missing_df], sort = True)
+    # station_data.sort_values("datetime", inplace=True)
+    station_data = station_data.reindex(columns=["datetime", "date", "time", "rain_1h_mm", "accumulation_hours"])
+    
+    station_data.set_index("datetime", inplace = True)
+    return station_data
 
+def complete_resample(station_data, out_fname):
     # Resample
-    # suva_aws.set_index("UTC")
-    station_3H = station_3H.rain_1h_mm.resample('3H').sum(min_count=6).to_frame()
+    station_data.set_index("datetime")
+    station_3H = station_data.rain_1h_mm.resample('3H').sum(min_count=3).to_frame()
     station_3H.reset_index()
 
     # Export
@@ -180,5 +195,40 @@ def complete_resample(station_data, out_fname):
     
     return station_3H
 
+def get_daily(station_data):
+    return station_data.rain_1h_mm.resample("D").sum().to_frame()
 #%% Suva Manual ##################
+suva_m = complete_df(suva_m_full)
 
+m_daily = get_daily(suva_m)
+
+# Plot time series
+# Some high amounts but manual lookups appears to correlate with days of high rain/flooding
+plt.figure(0)
+plt.plot(suva_m.rain_1h_mm)
+
+# Plot daily accumulations
+# Average rainfall appears to be low for the last period?
+plt.figure(1)
+plt.plot(m_daily.rain_1h_mm)
+
+# High values correspond to known flooding/heavy rain 
+suva_m_daily_outliers = m_daily.loc[m_daily.rain_1h_mm > 250]
+
+# Remove outlier days - NA
+
+# Save one hourly
+suva_m.to_csv(outpath + "suva_man_1H.csv", index = True)
+m_daily.to_csv(outpath + "suva_man_24H.csv", index = True)
+# %% Lautoka ##################
+lautoka_m_full.groupby("accumulation_hours").time.count()
+# %%
+lautoka_m = complete_df(lautoka_m_full)
+lautoka_m.set_index("datetime", inplace = True)
+
+# Plot full timeseries
+plt.plot(lautoka_m.rain_1h_mm)
+
+l_m_daily = lautoka_m.rain_1h_mm.resample("D").sum().to_frame()
+
+# %%
