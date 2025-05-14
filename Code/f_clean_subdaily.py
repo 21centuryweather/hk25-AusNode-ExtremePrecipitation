@@ -16,7 +16,7 @@ pd.options.mode.chained_assignment = None  # default='warn'
 stations = ["Suva Manual", "Suva AWS", "Lautoka Manual", "Lautoka TB3", "Penang TB3"]
 sub_daily_fpath = "../Data/Stations/Fiji_Meteorological_Service/Sub Daily Rainfall Data.xlsx"
 col_names = ["date", "time", "rain_1h_mm", "accumulation_hours"]
-outpath = "../Data/Stations/Processed/Fiji/"
+outpath = "../Data/Processed/Fiji/"
 
 # Read in data
 suva_aws_full = pd.read_excel(sub_daily_fpath, 
@@ -43,13 +43,6 @@ suva_m_full.groupby("accumulation_hours").count()
 #%% All dfs
 for df in df_list:
     df.groupby("accumulation_hours").count()
-
-
-#%%
-#TODO: infeasible value checks
-
-#%%
-# Daily plots
 
 #%% Compare daily totals of automatic and manual
 # Remove >1h accumulations
@@ -122,6 +115,7 @@ plt.boxplot(suva_aws.rain_1h_mm)
 # %% Move to UTC
 # Move model output rather than stations due to daily data accumulations
 # suva_aws["UTC"] = suva_aws.datetime - pd.Timedelta(hours = 12)
+suva_aws.reset_index(inplace=True)
 
 # Add missing timesteps
 expected_timesteps = pd.date_range(min(suva_aws.datetime), max(suva_aws.datetime), freq="h")
